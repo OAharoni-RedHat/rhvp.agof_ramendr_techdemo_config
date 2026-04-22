@@ -1,0 +1,86 @@
+# vim: ft=yaml.ansible
+---
+# AAP 2.5 compatibility aliases
+aap_username: '{{ controller_username_vault }}'
+aap_password: '{{ controller_password_vault }}'
+aap_organizations: '{{ controller_organizations }}'
+aap_validate_certs: '{{ controller_validate_certs }}'
+aap_configuration_async_retries: '{{ controller_configuration_async_retries }}'
+
+orgname_vault: 'RamenDR TechDemo'
+
+controller_username_vault: 'admin'
+controller_password_vault: '{{ admin_password }}'
+
+controller_username: '{{ controller_username_vault }}'
+controller_password: '{{ controller_password_vault }}'
+
+controller_configuration_async_retries: 30
+
+controller_validate_certs: false
+
+ramendr_project_name: 'RamenDR TechDemo Ansible Collection'
+
+controller_settings: []
+
+controller_organizations:
+  - name: '{{ orgname_vault }}'
+
+controller_projects:
+  - name: '{{ ramendr_project_name }}'
+    organization: '{{ orgname_vault }}'
+    scm_branch: main
+    scm_clean: 'no'
+    scm_delete_on_update: 'no'
+    scm_type: git
+    scm_update_on_launch: 'yes'
+    scm_url: 'https://github.com/validatedpatterns-demos/rhvp.ramendr_techdemo.git'
+
+controller_inventories:
+  - name: 'RamenDR VM Inventory'
+    organization: '{{ orgname_vault }}'
+    description: >-
+      Placeholder inventory. The discover_and_prep_redis playbook builds
+      its own in-memory inventory dynamically via the Kubernetes API.
+
+controller_credential_types: []
+
+controller_credentials:
+  - name: vm_ssh_credential
+    description: 'SSH credential for RHEL VMs managed by edge-gitops-vms'
+    organization: '{{ orgname_vault }}'
+    credential_type: Machine
+    inputs:
+      username: 'cloud-user'
+      ssh_key_data: '{{ vm_ssh_private_key }}'
+      become_method: sudo
+
+controller_templates:
+  - name: 'Discover and Install Redis'
+    organization: '{{ orgname_vault }}'
+    project: '{{ ramendr_project_name }}'
+    job_type: run
+    playbook: 'playbooks/discover_and_prep_redis.yml'
+    inventory: 'RamenDR VM Inventory'
+    credentials:
+      - vm_ssh_credential
+    extra_vars:
+      rhsm_username: '{{ rhsm_username }}'
+      rhsm_password: '{{ rhsm_password }}'
+    ask_variables_on_launch: false
+
+  - name: 'Setup AWS Route53 Failover'
+    organization: '{{ orgname_vault }}'
+    project: '{{ ramendr_project_name }}'
+    job_type: run
+    playbook: 'playbooks/setup_aws_alb.yml'
+    inventory: 'RamenDR VM Inventory'
+    credentials:
+      - vm_ssh_credential
+    ask_variables_on_launch: true
+
+controller_schedules: []
+
+controller_launch_jobs:
+  - name: 'Discover and Install Redis'
+    organization: '{{ orgname_vault }}'

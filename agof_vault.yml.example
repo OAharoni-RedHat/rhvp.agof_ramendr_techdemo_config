@@ -1,0 +1,13 @@
+# AGOF Vault File for RamenDR TechDemo
+# DO NOT COMMIT THIS FILE WITH REAL VALUES
+#
+# Fill in the values below and load into Vault as the agof-vault-file secret.
+# See values-secret.yaml.template for how to reference this file.
+---
+admin_password: "AAP_CONTROLLER_ADMIN_PASSWORD_HERE"
+rhsm_username: "YOUR_RHSM_USERNAME"
+rhsm_password: "YOUR_RHSM_PASSWORD"
+vm_ssh_private_key: |
+  -----BEGIN OPENSSH PRIVATE KEY-----
+  PASTE_YOUR_SSH_PRIVATE_KEY_HERE
+  -----END OPENSSH PRIVATE KEY-----
