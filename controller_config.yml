@@ -43,7 +43,31 @@ controller_inventories:
       Placeholder inventory. The discover_and_prep_redis playbook builds
       its own in-memory inventory dynamically via the Kubernetes API.
 
-controller_credential_types: []
+controller_credential_types:
+  - name: 'OpenShift API via Environment'
+    description: 'Injects K8S_AUTH_HOST, K8S_AUTH_API_KEY, K8S_AUTH_VERIFY_SSL as env vars'
+    kind: cloud
+    inputs:
+      fields:
+        - id: host
+          type: string
+          label: API Host URL
+        - id: api_key
+          type: string
+          label: Bearer Token
+          secret: true
+        - id: verify_ssl
+          type: boolean
+          label: Verify SSL
+          default: false
+      required:
+        - host
+        - api_key
+    injectors:
+      env:
+        K8S_AUTH_HOST: "{% raw %}{{ host }}{% endraw %}"
+        K8S_AUTH_API_KEY: "{% raw %}{{ api_key }}{% endraw %}"
+        K8S_AUTH_VERIFY_SSL: "{% raw %}{{ verify_ssl | default(false) | string }}{% endraw %}"
 
 controller_credentials:
   - name: vm_ssh_credential
@@ -54,6 +78,14 @@ controller_credentials:
       username: 'cloud-user'
       ssh_key_data: '{{ vm_ssh_private_key }}'
       become_method: sudo
+  - name: hub_k8s_credential
+    description: 'Hub cluster API via environment injection'
+    organization: '{{ orgname_vault }}'
+    credential_type: 'OpenShift API via Environment'
+    inputs:
+      host: '{{ hub_k8s_host }}'
+      api_key: '{{ hub_k8s_token }}'
+      verify_ssl: false
 
 controller_templates:
   - name: 'Discover and Install Redis'
@@ -64,6 +96,7 @@ controller_templates:
     inventory: 'RamenDR VM Inventory'
     credentials:
       - vm_ssh_credential
+      - hub_k8s_credential
     extra_vars:
       rhsm_username: '{{ rhsm_username }}'
       rhsm_password: '{{ rhsm_password }}'
