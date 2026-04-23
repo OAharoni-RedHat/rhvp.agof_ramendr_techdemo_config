@@ -11,3 +11,9 @@ vm_ssh_private_key: |
   -----BEGIN OPENSSH PRIVATE KEY-----
   PASTE_YOUR_SSH_PRIVATE_KEY_HERE
   -----END OPENSSH PRIVATE KEY-----
+
+# Hub cluster API credentials for the hub_k8s_credential (used by download_managed_kubeconfigs).
+# hub_k8s_host: oc whoami --show-server
+# hub_k8s_token: oc whoami -t  (or a long-lived service account token)
+hub_k8s_host: "https://api.YOUR_HUB_CLUSTER.example.com:6443"
+hub_k8s_token: "sha256~YOUR_TOKEN_HERE"

@@ -21,10 +21,20 @@ controller_validate_certs: false
 
 ramendr_project_name: 'RamenDR TechDemo Ansible Collection'
 
-controller_settings: []
+controller_settings:
+  - name: AWX_COLLECTIONS_ENABLED
+    value: true
+  - name: AWX_ROLES_ENABLED
+    value: true
 
+# Galaxy credential is attached in controller_organizations below. The
+# infra.aap_configuration dispatch processes controller_credentials before
+# controller_organizations, so the credential exists by the time the org
+# is updated.
 controller_organizations:
   - name: '{{ orgname_vault }}'
+    galaxy_credentials:
+      - ansible_galaxy_credential
 
 controller_projects:
   - name: '{{ ramendr_project_name }}'
@@ -113,6 +123,12 @@ controller_credentials:
     inputs:
       rhsm_username: '{{ rhsm_username }}'
       rhsm_password: '{{ rhsm_password }}'
+  - name: ansible_galaxy_credential
+    description: 'Public Ansible Galaxy for collection downloads during project sync'
+    organization: '{{ orgname_vault }}'
+    credential_type: 'Ansible Galaxy/Automation Hub API Token'
+    inputs:
+      url: 'https://galaxy.ansible.com/'
 
 controller_templates:
   - name: 'Discover and Install Redis'
