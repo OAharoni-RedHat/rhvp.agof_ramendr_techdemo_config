@@ -151,6 +151,7 @@ controller_templates:
     inventory: 'RamenDR VM Inventory'
     credentials:
       - vm_ssh_credential
+      - hub_k8s_credential
     ask_variables_on_launch: true
 
 controller_schedules: []
