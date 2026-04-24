@@ -129,6 +129,14 @@ controller_credentials:
     credential_type: 'Ansible Galaxy/Automation Hub API Token'
     inputs:
       url: 'https://galaxy.ansible.com/'
+  - name: aws_credential
+    description: 'AWS credentials for Route53 failover DNS'
+    organization: '{{ orgname_vault }}'
+    credential_type: 'Amazon Web Services'
+    inputs:
+      username: '{{ aws_access_key_id }}'
+      password: '{{ aws_secret_access_key }}'
+      security_token: ''
 
 controller_templates:
   - name: 'Discover and Install Redis'
@@ -152,6 +160,7 @@ controller_templates:
     credentials:
       - vm_ssh_credential
       - hub_k8s_credential
+      - aws_credential
     ask_variables_on_launch: true
 
 controller_schedules: []

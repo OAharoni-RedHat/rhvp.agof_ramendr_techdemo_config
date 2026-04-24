@@ -17,3 +17,8 @@ vm_ssh_private_key: |
 # hub_k8s_token: oc whoami -t  (or a long-lived service account token)
 hub_k8s_host: "https://api.YOUR_HUB_CLUSTER.example.com:6443"
 hub_k8s_token: "sha256~YOUR_TOKEN_HERE"
+
+# AWS credentials for Route53 failover DNS (Setup AWS Route53 Failover job).
+# aws_access_key_id and aws_secret_access_key from ~/.aws/credentials or IAM.
+aws_access_key_id: "YOUR_AWS_ACCESS_KEY_ID"
+aws_secret_access_key: "YOUR_AWS_SECRET_ACCESS_KEY"
