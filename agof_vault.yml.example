@@ -22,3 +22,7 @@ hub_k8s_token: "sha256~YOUR_TOKEN_HERE"
 # aws_access_key_id and aws_secret_access_key from ~/.aws/credentials or IAM.
 aws_access_key_id: "YOUR_AWS_ACCESS_KEY_ID"
 aws_secret_access_key: "YOUR_AWS_SECRET_ACCESS_KEY"
+
+# Quay.io credentials for pulling the Windows VM image (DataSource setup).
+windows_registry_username: "YOUR_QUAY_ROBOT_USERNAME"
+windows_registry_password: "YOUR_QUAY_ROBOT_PASSWORD"
